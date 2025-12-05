@@ -9,7 +9,7 @@ import { CarService } from 'src/app/services/car.service';
   templateUrl: './car.component.html',
   styleUrls: ['./car.component.css']
 })
-export class CarComponent implements OnInit {
+export class CarEditComponent implements OnInit {
   cars: Car[] = [];
   dataLoaded: boolean = false;
   imageUrl: string = "https://localhost:44388";
