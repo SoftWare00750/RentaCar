@@ -3,6 +3,7 @@ import {FormGroup,FormBuilder,FormControl,Validators} from"@angular/forms"
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
        if(this.loginForm.valid){
       let loginModel =Object.assign({},this.loginForm.value)
       this.authService.login(loginModel).subscribe(response=>{
-        this.toasterService.success(response.message,"Başarılı");
+        this.toasterService.success(response.message,"Success");
         localStorage.setItem("token",response.data.token);
         this.dataLoaded=true;
         this.authService.onRefresh();
@@ -48,11 +49,11 @@ export class LoginComponent implements OnInit {
       }
       ,responseError=>{
         
-        this.toasterService.error(responseError.error,"Hata!")
+        this.toasterService.error(responseError.error,"Error!")
       })
     }
      else {
-      this.toasterService.error("Lütfen tüm alanları doldurunuz","Dikkat!")
+      this.toasterService.error("Please fill in all fields","Attention!")
     }
     }
    

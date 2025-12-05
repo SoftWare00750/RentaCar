@@ -3,15 +3,15 @@
         <div class="col-md-6">
             <form [formGroup]="passwordUpdateForm">
                 <div class="mb-3">
-                  <label  for="oldPassword" class="form-label">Eski parola</label>
+                  <label  for="oldPassword" class="form-label">Old password</label>
                   <input formControlName="oldPassword" type="password" class="form-control" id="oldPassword">
                 </div>
                 <div class="mb-3">
-                    <label  for="input-new-password" class="form-label">Yeni parola</label>
+                    <label  for="input-new-password" class="form-label">New password</label>
                     <input formControlName="newPassword" type="password" class="form-control" id="input-new-password">
                   </div>
 
-                <button (click)="updatepassord()" type="submit" class="btn p-button">Güncelle</button>
+                <button (click)="updatepassord()" type="submit" class="btn p-button">Update</button>
               </form>
          
         </div>

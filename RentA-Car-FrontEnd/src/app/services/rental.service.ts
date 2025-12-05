@@ -4,13 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { ListResponseModel } from '../models/listResponseModel';
 import { Rental } from '../models/rental';
 import { ResponseModel } from '../models/responseModel';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RentalService {
 apiUrl="https://localhost:44388/api/"
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient) { this.apiUrl = environment.apiUrl;}
 
   getRental(): Observable<ListResponseModel<Rental>>{
     let newPath = this.apiUrl+"rentals/getallrentaldto"

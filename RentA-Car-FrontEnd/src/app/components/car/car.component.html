@@ -1,47 +1,89 @@
 <div class="container">
-<div class="row">
-  <div class="col-md-3 ">
+  <div class="row">
+    <div class="col-md-3">
       <app-brand></app-brand>
       <app-color></app-color>
-  </div>
-  <div class="col-md-9">
-    <div class="mb-3" >
-  
-      <label for="carFilter" class="form-label"></label>
-      <input type="text" [(ngModel)]="carFilter" class="form-control" id="carFilter" 
-      placeholder="arama ifadesi giriniz">
     </div>
-    
-    <app-car-filter></app-car-filter>
-    <div class="row" *ngIf="dataLoaded==true">
-        <div *ngFor="let car of cars |carFilter:carFilter" class="card m-2 " style="width: 267px; ">
-            <img  src="{{imageUrl}}{{car.imagePath}}" alt="{{imageUrl}}{{car.imagePath}}" class="card-img-top" width="320" height="200" >
-            
-            <div class="card-body">
-              <h5 class="card-title d-flex justify-content-center">{{car.carName}}</h5>
-              <p class="card-text d-flex justify-content-center">{{car.description}}</p>
-            </div>
-            <ul class="list-group list-group-flush">
-              <li class="list-group-item">Marka: {{car.brandName}}</li>
-              <li class="list-group-item">Renk: {{car.colorName}}</li>
-              <li class="list-group-item">Model: {{car.modelYear}}</li>
-              <li class="list-group-item">Fiyat: {{car.dailyPrice }}</li>
-            </ul>
-            <div class="card-body">
-                <section style="float:left">
-                  <button routerLink="/car/details/{{car.carId }}" type="button" class="btn btn-outline-dark">Detay</button>
-                </section>
-                <section style="float: right">
-                  <button routerLink="/car/rental/{{car.carId}}" type="button" class="btn btn-outline-dark">Kirala</button>
-                </section>
-            </div>
+    <div class="col-md-9">
+      <div class="mb-3">
+        <label for="carFilter" class="form-label">Search Cars</label>
+        <input 
+          type="text" 
+          [(ngModel)]="carFilter" 
+          class="form-control" 
+          id="carFilter" 
+          placeholder="Search by car name or description..."
+        />
+      </div>
+
+      <app-car-filter></app-car-filter>
+
+      <!-- Loading Spinner -->
+      <div *ngIf="!dataLoaded" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2">Loading cars...</p>
+      </div>
+
+      <!-- Error Message -->
+      <div *ngIf="dataLoaded && errorMessage" class="alert alert-warning" role="alert">
+        {{ errorMessage }}
+      </div>
+
+      <!-- No Cars Available -->
+      <div *ngIf="dataLoaded && !errorMessage && cars.length === 0" class="alert alert-info" role="alert">
+        No cars found matching your criteria.
+      </div>
+
+      <!-- Cars Grid -->
+      <div class="row" *ngIf="dataLoaded && !errorMessage && cars.length > 0">
+        <div *ngFor="let car of cars | carFilter:carFilter" class="card m-2" style="width: 267px;">
+          <img 
+            [src]="imageUrl + car.imagePath" 
+            [alt]="car.carName" 
+            class="card-img-top" 
+            width="320" 
+            height="200"
+            onerror="this.src='assets/img/default-car.png'"
+          />
+          
+          <div class="card-body">
+            <h5 class="card-title d-flex justify-content-center">{{ car.carName }}</h5>
+            <p class="card-text d-flex justify-content-center">{{ car.description }}</p>
           </div>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">Brand: {{ car.brandName }}</li>
+            <li class="list-group-item">Color: {{ car.colorName }}</li>
+            <li class="list-group-item">Model Year: {{ car.modelYear }}</li>
+            <li class="list-group-item">Daily Price: {{ car.dailyPrice | currency:'USD':'symbol':'1.2-2' }}</li>
+          </ul>
+
+          <div class="card-body">
+            <section style="float:left">
+              <button 
+                [routerLink]="['/car/details', car.carId]" 
+                type="button" 
+                class="btn btn-outline-dark"
+              >
+                Details
+              </button>
+            </section>
+            <section style="float: right">
+              <button 
+                [routerLink]="['/car/rental', car.carId]" 
+                type="button" 
+                class="btn btn-outline-dark"
+              >
+                Rent
+              </button>
+            </section>
+          </div>
+        </div>
+      </div>
     </div>
-    
   </div>
-</div>
-
-
 </div>
 
 <app-footer></app-footer>

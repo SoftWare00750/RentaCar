@@ -2,6 +2,9 @@ import { TestBed } from '@angular/core/testing';
 
 import { AuthService } from './auth.service';
 
+import { environment } from 'src/environments/environment';
+
+
 describe('AuthService', () => {
   let service: AuthService;
 
@@ -14,3 +17,5 @@ describe('AuthService', () => {
     expect(service).toBeTruthy();
   });
 });
+
+

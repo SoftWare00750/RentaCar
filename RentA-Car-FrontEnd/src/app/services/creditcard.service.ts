@@ -4,13 +4,14 @@ import { Observable } from 'rxjs';
 import { CreditCard } from '../models/creditCard';
 import { ListResponseModel } from '../models/listResponseModel';
 import { ResponseModel } from '../models/responseModel';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class creditCardService {
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) { this.apiUrl = environment.apiUrl;}
 
   apiUrl = 'https://localhost:44388/api/';
 

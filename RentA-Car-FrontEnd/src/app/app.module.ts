@@ -20,7 +20,7 @@ import { BrandFilterPipe } from './pipes/brand-filter.pipe';
 import { CarFilterPipe } from './pipes/car-filter.pipe';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { CarFilterComponent } from './components/car-filter/car-filter.component';
-
+import { environment } from 'src/environments/environment';
 
 import { ToastrModule } from 'ngx-toastr';
 import { CreditCardComponent } from './components/creditcard/creditcard.component';
@@ -42,7 +42,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HomeComponent } from './components/home/home/home.component';
 import { UserComponent } from './components/auth/user-profil/user-profil.component';
 import { UsereditComponent } from './components/auth/user-profil/useredit/useredit.component';
-
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 
 
 export function tokenGetter() {
@@ -109,8 +109,18 @@ export function tokenGetter() {
 
   ],
   providers: [
-    {provide:HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true}
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+   apiUrl="https://localhost:44388/api/";
+  title = 'RentACar-FrontEnd';
+
+  constructor(private httpClient: HttpClient) {
+    this.apiUrl = environment.apiUrl;
+  }
+  
+  
+}

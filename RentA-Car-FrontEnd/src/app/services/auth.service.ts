@@ -10,56 +10,59 @@ import { ResponseModel } from '../models/responseModel';
 import { SingleResponseModel } from '../models/singleResponseModel';
 import { TokenModel } from '../models/tokenModel';
 import { LocalStorageService } from './local-storage-service.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-
-  apiUrl="https://localhost:44388/api/auth/";
+  // Changed: Defined type only, removed hardcoded string
+  apiUrl: string;
   name: string = "";
-  surname:string="";
-  userName:string="";
-  role:any;
+  surname: string = "";
+  userName: string = "";
+  role: any;
   roles: any[] = [];
   token: any;
   isLoggedIn: boolean = false;
   userId: number;
-  email:string;
-  
+  email: string;
+
   constructor(
-    private httpClient:HttpClient,
+    private httpClient: HttpClient,
     private router: Router,
     private jwtHelper: JwtHelperService,
-    private localStorage:LocalStorageService
- 
-  ) { }
-
-  login(loginModel:LoginModel):Observable<SingleResponseModel<TokenModel>>{
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"login",loginModel)
+    private localStorage: LocalStorageService
+  ) {
+    // Added: Initialize apiUrl from environment
+    this.apiUrl = environment.apiUrl;
   }
 
-  register(registerModel:RegisterModel):Observable<SingleResponseModel<TokenModel>>{
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl+"register",registerModel)
+  login(loginModel: LoginModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "login", loginModel)
   }
+
+  register(registerModel: RegisterModel): Observable<SingleResponseModel<TokenModel>> {
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "register", registerModel)
+  }
+
   logout() {
-  
     this.localStorage.clear()
     this.onRefresh();
     this.router.navigate(['/login']);
-}
+  }
 
-  isAuthenticated(){
-    if(this.localStorage.getItem("token")){
+  isAuthenticated() {
+    if (this.localStorage.getItem("token")) {
       return true;
     }
-    else{
+    else {
       return false
     }
   }
 
-  userDetailFromToken(){
+  userDetailFromToken() {
     this.token = this.localStorage.getItem("token");
     let decodedToken = this.jwtHelper.decodeToken(this.token);
     let name = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
@@ -68,10 +71,10 @@ export class AuthService {
     this.surname = surname.split(' ')[1];
     this.roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
     this.role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-    this.userId =parseInt(decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
-    this.email=decodedToken["email"];
-    this.userName= name.split(' ')[0]+" "+ surname.split(' ')[1] ;
-    
+    this.userId = parseInt(decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
+    this.email = decodedToken["email"];
+    this.userName = name.split(' ')[0] + " " + surname.split(' ')[1];
+
   }
 
   roleCheck(roleList: string[]) {
@@ -88,6 +91,7 @@ export class AuthService {
       return false;
     }
   }
+
   async onRefresh() {
     this.router.routeReuseStrategy.shouldReuseRoute = function () { return false }
     const currentUrl = this.router.url + '?'
@@ -97,14 +101,14 @@ export class AuthService {
     })
   }
 
-  
-  changePassword(passwordChangeModel:PasswordChangeModel):Observable<ResponseModel>{
+
+  changePassword(passwordChangeModel: PasswordChangeModel): Observable<ResponseModel> {
     let newPath = this.apiUrl + "changepassword"
     return this.httpClient
-    .post<ResponseModel>(newPath,passwordChangeModel)
+      .post<ResponseModel>(newPath, passwordChangeModel)
   }
 
-  getCurrentUserId():number {
+  getCurrentUserId(): number {
     return this.userId
   }
 
