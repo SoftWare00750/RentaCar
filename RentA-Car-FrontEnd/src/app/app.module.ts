@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import {HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {FormsModule,ReactiveFormsModule} from '@angular/forms'
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { JwtModule } from '@auth0/angular-jwt';
-
+import { CommonModule } from '@angular/common';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -24,31 +24,19 @@ import { environment } from 'src/environments/environment';
 
 import { ToastrModule } from 'ngx-toastr';
 import { CreditCardComponent } from './components/creditcard/creditcard.component';
-import { CarAddComponent } from './components/pages/admin-dashboard/cars-dashboard/car-add/car-add.component';
-
-import { BrandAddComponent } from './components/pages/admin-dashboard/brands-dashboard/brand-add/brand-add.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { AdminDashboardComponent } from './components/pages/admin-dashboard/admin-dashboard.component';
-import { ColorsDashboardComponent } from './components/pages/admin-dashboard/colors-dashboard/colors-dashboard.component';
-import { ColorAddComponent } from './components/pages/admin-dashboard/colors-dashboard/color-add/color-add.component';
-import { ColorEditComponent } from './components/pages/admin-dashboard/colors-dashboard/color-edit/color-edit.component';
-import { BrandsDashboardComponent } from './components/pages/admin-dashboard/brands-dashboard/brands-dashboard.component';
-import { BrandEditComponent } from './components/pages/admin-dashboard/brands-dashboard/brand-edit/brand-edit.component';
-import { CarsDashboardComponent } from './components/pages/admin-dashboard/cars-dashboard/cars-dashboard.component';
-import { CarEditComponent } from './components/pages/admin-dashboard/cars-dashboard/car-edit/car-edit.component';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { HomeComponent } from './components/home/home/home.component';
 import { UserComponent } from './components/auth/user-profil/user-profil.component';
 import { UsereditComponent } from './components/auth/user-profil/useredit/useredit.component';
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 
-
 export function tokenGetter() {
   return localStorage.getItem("token");
 }
-
 
 @NgModule({
   declarations: [
@@ -65,62 +53,43 @@ export function tokenGetter() {
     CarFilterPipe,
     CarFilterComponent,
     CreditCardComponent,
-    CarAddComponent,
-    CarEditComponent,
-    BrandAddComponent,
-    ColorAddComponent,
     FooterComponent,
     LoginComponent,
     RegisterComponent,
     AdminDashboardComponent,
-    ColorsDashboardComponent,
-    ColorEditComponent,
-    BrandsDashboardComponent,
-    BrandEditComponent,
-    CarsDashboardComponent,
     HomeComponent,
     UserComponent,
     UsereditComponent,
-   
-   
-    
-  
-  
   ],
   imports: [
-    
     BrowserModule,
+    CommonModule,
     AppRoutingModule,
-
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    
     NgMultiSelectDropDownModule.forRoot(),
     ToastrModule.forRoot({
-      positionClass:"toast-bottom-right"
+      positionClass: "toast-bottom-right"
     }),
     JwtModule.forRoot({
-      config:{
+      config: {
         tokenGetter: tokenGetter,
       }
     }),
-
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
-   apiUrl="https://localhost:44388/api/";
+export class AppModule {
+  apiUrl = "https://localhost:44388/api/";
   title = 'RentACar-FrontEnd';
 
   constructor(private httpClient: HttpClient) {
     this.apiUrl = environment.apiUrl;
   }
-  
-  
 }
