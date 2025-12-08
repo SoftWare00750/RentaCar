@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using RentACar.Entities.Concrete;
+using RentACar.Core.Entities.Concrete;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

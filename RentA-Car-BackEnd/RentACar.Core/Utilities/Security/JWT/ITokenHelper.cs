@@ -1,4 +1,4 @@
-using RentACar.Entities.Concrete;
+using RentACar.Core.Entities.Concrete;
 
 namespace RentACar.Core.Utilities.Security.JWT
 {
