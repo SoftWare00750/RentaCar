@@ -2,7 +2,6 @@ using RentACar.Business.Abstract;
 using RentACar.Core.Utilities.Results;
 using RentACar.Core.Utilities.Security.Hashing;
 using RentACar.Core.Utilities.Security.JWT;
-using RentACar.DataAccess.Abstract;
 using RentACar.Entities.Concrete;
 using RentACar.Entities.DTOs;
 
@@ -63,8 +62,27 @@ namespace RentACar.Business.Concrete
 
         public IDataResult<AccessToken> CreateAccessToken(User user)
         {
+            // Convert RentACar.Entities.Concrete.User to RentACar.Core.Entities.Concrete.User
+            var coreUser = new Core.Entities.Concrete.User
+            {
+                UserId = user.UserId,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PasswordHash = user.PasswordHash,
+                PasswordSalt = user.PasswordSalt,
+                Status = user.Status
+            };
+
+            // Convert RentACar.Entities.Concrete.OperationClaim to RentACar.Core.Entities.Concrete.OperationClaim
             var claims = _userService.GetClaims(user);
-            var accessToken = _tokenHelper.CreateToken(user, claims);
+            var coreClaims = claims.Select(c => new Core.Entities.Concrete.OperationClaim
+            {
+                Id = c.Id,
+                Name = c.Name
+            }).ToList();
+
+            var accessToken = _tokenHelper.CreateToken(coreUser, coreClaims);
             return new SuccessDataResult<AccessToken>(accessToken, "Access token created");
         }
     }

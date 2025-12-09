@@ -33,7 +33,12 @@ namespace RentACar.Business.Concrete
 
         public IDataResult<Brand> GetById(int brandId)
         {
-            return new SuccessDataResult<Brand>(_brandDal.Get(b => b.BrandId == brandId));
+            var brand = _brandDal.Get(b => b.BrandId == brandId);
+            if (brand == null)
+            {
+                return new ErrorDataResult<Brand>("Brand not found");
+            }
+            return new SuccessDataResult<Brand>(brand);
         }
 
         public IResult Update(Brand brand)

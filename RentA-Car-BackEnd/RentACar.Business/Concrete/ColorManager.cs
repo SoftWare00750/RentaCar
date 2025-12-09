@@ -33,7 +33,12 @@ namespace RentACar.Business.Concrete
 
         public IDataResult<Color> GetById(int colorId)
         {
-            return new SuccessDataResult<Color>(_colorDal.Get(c => c.ColorId == colorId));
+            var color = _colorDal.Get(c => c.ColorId == colorId);
+            if (color == null)
+            {
+                return new ErrorDataResult<Color>("Color not found");
+            }
+            return new SuccessDataResult<Color>(color);
         }
 
         public IResult Update(Color color)

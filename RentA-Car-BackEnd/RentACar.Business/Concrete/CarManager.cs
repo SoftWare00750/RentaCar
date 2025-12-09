@@ -34,7 +34,12 @@ namespace RentACar.Business.Concrete
 
         public IDataResult<Car> GetById(int carId)
         {
-            return new SuccessDataResult<Car>(_carDal.Get(c => c.CarId == carId));
+            var car = _carDal.Get(c => c.CarId == carId);
+            if (car == null)
+            {
+                return new ErrorDataResult<Car>("Car not found");
+            }
+            return new SuccessDataResult<Car>(car);
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()

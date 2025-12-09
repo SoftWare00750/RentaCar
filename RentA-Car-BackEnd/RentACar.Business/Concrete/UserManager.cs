@@ -24,14 +24,19 @@ namespace RentACar.Business.Concrete
             _userDal.Add(user);
         }
 
-        public User GetByMail(string email)
+        public User? GetByMail(string email)
         {
             return _userDal.Get(u => u.Email == email);
         }
 
         public IDataResult<User> GetById(int userId)
         {
-            return new SuccessDataResult<User>(_userDal.Get(u => u.UserId == userId));
+            var user = _userDal.Get(u => u.UserId == userId);
+            if (user == null)
+            {
+                return new ErrorDataResult<User>("User not found");
+            }
+            return new SuccessDataResult<User>(user);
         }
     }
 }
