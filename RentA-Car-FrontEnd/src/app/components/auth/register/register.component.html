@@ -16,11 +16,11 @@
 		<!-- Login Form -->
 		<form  [formGroup]="registerForm">
 	
-			<input formControlName="firstName" type="text" id="firstName" class="fadeIn second zero-raduis" name="firstName" placeholder="Ad">
+			<input formControlName="firstName" type="text" id="firstName" class="fadeIn second zero-raduis" name="firstName" placeholder="First name">
 			<div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
                     <div *ngIf="f.firstName.errors.required"> First name cannot be empty</div>
 			</div>
-			<input formControlName="lastName" type="text" id="lastName" class="fadeIn second zero-raduis" name="lastName" placeholder="Soyad">
+			<input formControlName="lastName" type="text" id="lastName" class="fadeIn second zero-raduis" name="lastName" placeholder="Last name">
 			<div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
 				<div *ngIf="f.lastName.errors.required">Last name cannot be empty</div>
 			</div>
@@ -36,9 +36,9 @@
 				<div id="formFooter">
 				
 				</div>
-			<input  (click)="register()" type="submit" class="fadeIn fourth zero-raduis" value="Kayıt Ol">
+			<input  (click)="register()" type="submit" class="fadeIn fourth zero-raduis" value="Register">
 			<h2>Already have an account?</h2>
-			<input routerLink="/login" type="button" class="fadeIn fourth zero-raduis pc" value="Giriş Yap">
+			<input routerLink="/login" type="button" class="fadeIn fourth zero-raduis pc" value="Login">
 		</form>
 	</div>
 </div>
