@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup,FormControl,Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -10,46 +11,51 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
-  submitted:boolean = false;
-  dataLoaded:boolean = false;
+  submitted: boolean = false;
+  dataLoaded: boolean = false;
+
   constructor(
-    private  formBuilder:FormBuilder,
-    private authService:AuthService,
-    private toasterService:ToastrService,
-  ) { }
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private toasterService: ToastrService,
+    private router: Router,
+  ) {}
 
   get f() { return this.registerForm.controls; }
 
   ngOnInit(): void {
-    this.createLoginForm();
+    this.createRegisterForm();
   }
-  createLoginForm(){
-    this.registerForm=this.formBuilder.group({
+
+  createRegisterForm() {
+    this.registerForm = this.formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      email: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(8)]]
-    })
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
   }
-  register(){
-    if(this.registerForm.valid){
-      let registerModel =Object.assign({},this.registerForm.value)
-        this.authService.register(registerModel).subscribe(response=>{
-        this.toasterService.success(response.message,"Başarılı")
-        this.dataLoaded=true
-        
-      }
-      ,responseError=>{
-       
-        if(responseError.error.ValidationErrors.length > 0) {
-         
-          this.toasterService.error(responseError.error,"Hata!")
+
+  register() {
+    this.submitted = true;
+    if (this.registerForm.valid) {
+      const registerModel = Object.assign({}, this.registerForm.value);
+      this.authService.register(registerModel).subscribe(
+        response => {
+          this.toasterService.success(response.message, 'Success');
+          // Auto-login after registration
+          localStorage.setItem('token', response.data.token);
+          this.authService.userDetailFromToken();
+          this.dataLoaded = true;
+          this.router.navigate(['/home']);
+        },
+        responseError => {
+          const msg = responseError.error?.message || responseError.error || 'Registration failed';
+          this.toasterService.error(msg, 'Error!');
         }
-        
-      })
-    }
-     else {
-      this.toasterService.error("Lütfen tüm alanları doldurunuz","Dikkat!")
+      );
+    } else {
+      this.toasterService.error('Please fill in all fields', 'Attention!');
     }
   }
 }

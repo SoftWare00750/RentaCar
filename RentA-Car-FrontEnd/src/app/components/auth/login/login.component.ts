@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormGroup,FormBuilder,FormControl,Validators} from"@angular/forms"
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/services/auth.service';
@@ -11,51 +11,49 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm:FormGroup
-  dataLoaded:boolean = false;
+  loginForm: FormGroup;
+  dataLoaded: boolean = false;
+
   constructor(
-    private  formBuilder:FormBuilder,
-    private authService:AuthService,
-    private toasterService:ToastrService,
+    private formBuilder: FormBuilder,
+    private authService: AuthService,
+    private toasterService: ToastrService,
     private router: Router,
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-  this.createLoginForm();
-}
-  createLoginForm(){
-    this.loginForm=this.formBuilder.group({
-      email:["",Validators.required],
-      password:["",Validators.required]
-    })
+    // Redirect if already logged in
+    if (this.authService.isAuthenticated()) {
+      this.router.navigate(['/home']);
+    }
+    this.createLoginForm();
   }
 
+  createLoginForm() {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
 
-  login(){
-    let isSessionActive=localStorage.getItem("token")
-    if(
-      isSessionActive=="0"||
-      isSessionActive==undefined||
-      !(isSessionActive=="1")
-    ){
-       if(this.loginForm.valid){
-      let loginModel =Object.assign({},this.loginForm.value)
-      this.authService.login(loginModel).subscribe(response=>{
-        this.toasterService.success(response.message,"Success");
-        localStorage.setItem("token",response.data.token);
-        this.dataLoaded=true;
-        this.authService.onRefresh();
-        this.router.navigate(['/home']);
-      }
-      ,responseError=>{
-        
-        this.toasterService.error(responseError.error,"Error!")
-      })
+  login() {
+    if (this.loginForm.valid) {
+      const loginModel = Object.assign({}, this.loginForm.value);
+      this.authService.login(loginModel).subscribe(
+        response => {
+          this.toasterService.success(response.message, 'Success');
+          localStorage.setItem('token', response.data.token);
+          this.authService.userDetailFromToken();
+          this.dataLoaded = true;
+          this.router.navigate(['/home']);
+        },
+        responseError => {
+          const msg = responseError.error?.message || responseError.error || 'Login failed';
+          this.toasterService.error(msg, 'Error!');
+        }
+      );
+    } else {
+      this.toasterService.error('Please fill in all fields', 'Attention!');
     }
-     else {
-      this.toasterService.error("Please fill in all fields","Attention!")
-    }
-    }
-   
   }
 }

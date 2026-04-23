@@ -10,19 +10,21 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class RentalService {
-apiUrl="https://localhost:44388/api/"
-  constructor(private httpClient:HttpClient) { this.apiUrl = environment.apiUrl;}
+  apiUrl = environment.apiUrl;
 
-  getRental(): Observable<ListResponseModel<Rental>>{
-    let newPath = this.apiUrl+"rentals/getallrentaldto"
-    return this.httpClient.get<ListResponseModel<Rental>>(newPath);
+  constructor(private httpClient: HttpClient) {}
+
+  getRental(): Observable<ListResponseModel<Rental>> {
+    return this.httpClient.get<ListResponseModel<Rental>>(this.apiUrl + 'rentals/getallrentaldto');
   }
-  addRental(rental:Rental){
-    let newPath = this.apiUrl + "rentals/add"
-    this.httpClient.post(newPath,rental).subscribe()
+
+  addRental(rental: Rental): void {
+    this.httpClient.post(this.apiUrl + 'rentals/add', rental).subscribe({
+      error: (err) => console.error('Rental add error:', err)
+    });
   }
-  isRentable(rental:Rental):Observable<ResponseModel>{
-    let newPath = this.apiUrl + "rentals/isrentable"
-    return this.httpClient.post<ResponseModel>(newPath,rental);
+
+  isRentable(rental: Rental): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(this.apiUrl + 'rentals/isrentable', rental);
   }
 }
