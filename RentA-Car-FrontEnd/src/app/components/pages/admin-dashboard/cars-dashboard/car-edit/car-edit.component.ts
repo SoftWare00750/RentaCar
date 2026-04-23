@@ -26,7 +26,7 @@ export class CarEditComponent implements OnInit {
   selectedBrand: number;
   modelYearList: number[] = [];
 
-  imageUrl="https://localhost:44388";
+  imageUrl = "https://rentacar-api-7y4d.onrender.com";
 
   constructor(
     private carService: CarService,
@@ -145,7 +145,7 @@ export class CarEditComponent implements OnInit {
       let carModule: Car = {
         carId: this.car.carId,
         ...this.carUpdateForm.value,
-      }; 
+      };                                                                                                                                                                                                                                                  
       this.carService.deletCar(carModule).subscribe(
         (response) => {
           this.toastrService.success(response.message);

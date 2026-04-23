@@ -11,9 +11,9 @@ import { environment } from 'src/environments/environment';
 export class CustomerService {
 apiUrl="https://localhost:44388/api/customers/getcustomerdetails"
   constructor(private httpClient:HttpClient) { 
-   this.apiUrl = environment.apiUrl;
-  }
-  getCustomer(): Observable<ListResponseModel<Customer>>{
-    return this.httpClient.get<ListResponseModel<Customer>>(this.apiUrl);
-  }
+  this.apiUrl = environment.apiUrl;
+}
+getCustomer(): Observable<ListResponseModel<Customer>>{
+  return this.httpClient.get<ListResponseModel<Customer>>(this.apiUrl + 'customers/getcustomerdetails');
+}
 }

@@ -5,8 +5,7 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 export const environment = {
   production: false,
-  // Backend API URL - update to match your running backend
-  apiUrl: 'https://rentacar-api-7y4d.onrender.com'
+  apiUrl: 'https://rentacar-api-7y4d.onrender.com/api/'
 };
 /*
  * For easier debugging in development mode, you can import the following file

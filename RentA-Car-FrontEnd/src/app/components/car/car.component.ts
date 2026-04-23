@@ -12,7 +12,7 @@ import { CarService } from 'src/app/services/car.service';
 export class CarComponent implements OnInit {
   cars: Car[] = [];
   dataLoaded: boolean = false;
-  imageUrl: string = "https://localhost:44388";
+  imageUrl: string = "https://rentacar-api-7y4d.onrender.com";
   carFilter: string = "";
   errorMessage: string = "";
 

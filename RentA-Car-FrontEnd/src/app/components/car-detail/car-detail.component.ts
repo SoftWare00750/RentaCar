@@ -16,7 +16,7 @@ export class CarDetailComponent implements OnInit {
   carImages:CarImage[]=[];
   currentImage : CarImage;
   dataLoaded:boolean = false;
-  imageUrl:string = "https://localhost:44388";
+  imageUrl:string = "https://rentacar-api-7y4d.onrender.com";
   
   constructor(private carService: CarService,
     private carImageService: CarImageService, 
