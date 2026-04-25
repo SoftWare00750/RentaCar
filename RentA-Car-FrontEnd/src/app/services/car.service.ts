@@ -38,25 +38,29 @@ export class CarService {
     return this.httpClient.post<ResponseModel>(this.apiUrl + 'cars/delete', car);
   }
 
+  // Fix: use correct backend endpoint
   getCarsByBrand(brandId: number): Observable<ListResponseModel<Car>> {
-    return this.httpClient.get<ListResponseModel<Car>>(this.apiUrl + 'cars/getbybrand?brandId=' + brandId);
+    return this.httpClient.get<ListResponseModel<Car>>(this.apiUrl + 'cars/getcarsbybrandid?brandId=' + brandId);
   }
 
+  // Fix: use correct backend endpoint
   getCarsByColor(colorId: number): Observable<ListResponseModel<Car>> {
-    return this.httpClient.get<ListResponseModel<Car>>(this.apiUrl + 'cars/getbycolor?colorId=' + colorId);
+    return this.httpClient.get<ListResponseModel<Car>>(this.apiUrl + 'cars/getcarsbycolorid?colorId=' + colorId);
   }
 
+  // Fix: use correct backend endpoint
   getCarsBySelect(brandId: number, colorId: number): Observable<ListResponseModel<Car>> {
     return this.httpClient.get<ListResponseModel<Car>>(
-      this.apiUrl + 'cars/getbyselected?brandId=' + brandId + '&colorId=' + colorId
+      this.apiUrl + 'cars/getcarsbybrandandcolorid?brandId=' + brandId + '&colorId=' + colorId
     );
   }
 
   getCarDetail(carId: number): Observable<ListResponseModel<Car>> {
-    return this.httpClient.get<ListResponseModel<Car>>(this.apiUrl + 'cars/getcardetail?carId=' + carId);
+    return this.httpClient.get<ListResponseModel<Car>>(this.apiUrl + 'cars/getcardetail/' + carId);
   }
 
+  // Fix: use correct backend endpoint
   getAllCarDetail(): Observable<ListResponseModel<DashboardCars>> {
-    return this.httpClient.get<ListResponseModel<DashboardCars>>(this.apiUrl + 'cars/getallcardetail');
+    return this.httpClient.get<ListResponseModel<DashboardCars>>(this.apiUrl + 'cars/getcardetails');
   }
 }
