@@ -16,8 +16,6 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class AuthService {
-
-  // Changed: Defined type only, removed hardcoded string
   apiUrl: string;
   name: string = "";
   surname: string = "";
@@ -35,81 +33,69 @@ export class AuthService {
     private jwtHelper: JwtHelperService,
     private localStorage: LocalStorageService
   ) {
-    // Added: Initialize apiUrl from environment
     this.apiUrl = environment.apiUrl;
   }
 
   login(loginModel: LoginModel): Observable<SingleResponseModel<TokenModel>> {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "login", loginModel)
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(
+      this.apiUrl + 'auth/login', loginModel
+    );
   }
 
   register(registerModel: RegisterModel): Observable<SingleResponseModel<TokenModel>> {
-    return this.httpClient.post<SingleResponseModel<TokenModel>>(this.apiUrl + "register", registerModel)
+    return this.httpClient.post<SingleResponseModel<TokenModel>>(
+      this.apiUrl + 'auth/register', registerModel
+    );
+  }
+
+  changePassword(passwordChangeModel: PasswordChangeModel): Observable<ResponseModel> {
+    return this.httpClient.post<ResponseModel>(
+      this.apiUrl + 'auth/changepassword', passwordChangeModel
+    );
   }
 
   logout() {
-    this.localStorage.clear()
+    this.localStorage.clear();
     this.onRefresh();
     this.router.navigate(['/login']);
   }
 
-  isAuthenticated() {
-    if (this.localStorage.getItem("token")) {
-      return true;
-    }
-    else {
-      return false
-    }
+  isAuthenticated(): boolean {
+    return !!this.localStorage.getItem('token');
   }
 
   userDetailFromToken() {
-    this.token = this.localStorage.getItem("token");
+    this.token = this.localStorage.getItem('token');
     let decodedToken = this.jwtHelper.decodeToken(this.token);
     let name = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
     this.name = name.split(' ')[0];
-    let surname = decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
-    this.surname = surname.split(' ')[1];
+    this.surname = name.split(' ')[1] || '';
     this.roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
     this.role = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
-    this.userId = parseInt(decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']);
-    this.email = decodedToken["email"];
-    this.userName = name.split(' ')[0] + " " + surname.split(' ')[1];
-
+    this.userId = parseInt(
+      decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier']
+    );
+    this.email = decodedToken['email'];
+    this.userName = this.name + ' ' + this.surname;
   }
 
-  roleCheck(roleList: string[]) {
+  roleCheck(roleList: string[]): boolean {
     if (this.roles !== null) {
-      roleList.forEach(role => {
-        if (this.roles.includes(role)) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      return true;
-    } else {
-      return false;
+      return roleList.some(role => this.roles.includes(role));
     }
+    return false;
   }
 
   async onRefresh() {
-    this.router.routeReuseStrategy.shouldReuseRoute = function () { return false }
-    const currentUrl = this.router.url + '?'
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    const currentUrl = this.router.url + '?';
     return this.router.navigateByUrl(currentUrl).then(() => {
-      this.router.navigated = false
-      this.router.navigate([this.router.url])
-    })
-  }
-
-
-  changePassword(passwordChangeModel: PasswordChangeModel): Observable<ResponseModel> {
-    let newPath = this.apiUrl + "changepassword"
-    return this.httpClient
-      .post<ResponseModel>(newPath, passwordChangeModel)
+      this.router.navigated = false;
+      this.router.navigate([this.router.url]);
+    });
   }
 
   getCurrentUserId(): number {
-    return this.userId
+    return this.userId;
   }
-
 }
