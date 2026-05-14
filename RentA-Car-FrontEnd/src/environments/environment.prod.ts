@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://rentacar-backend-t3we.onrender.com/api/'
+  apiUrl: 'https://rentacar-backend-x1mg.onrender.com'
 };
