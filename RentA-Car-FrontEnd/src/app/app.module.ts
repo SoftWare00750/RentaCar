@@ -86,7 +86,7 @@ export function tokenGetter() {
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  apiUrl = "https://localhost:44388/api/";
+  apiUrl = "https://rentacar-backend-x1mg.onrender.com";
   title = 'RentACar-FrontEnd';
 
   constructor(private httpClient: HttpClient) {

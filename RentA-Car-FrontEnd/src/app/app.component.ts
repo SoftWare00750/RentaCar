@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class AppComponent {
-   apiUrl="https://localhost:44388/api/";
+   apiUrl="https://rentacar-backend-x1mg.onrender.com";
   title = 'RentACar-FrontEnd';
   
   
