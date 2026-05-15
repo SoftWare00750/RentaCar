@@ -20,12 +20,19 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.getCars()
   }
-  getCars(){
-    this.carService.getCars().subscribe(response=>{
-      this.cars=response.data.slice(0,6);
-      this.dataLoaded=true;
-    })
-  }
+  
+  getCars() {
+  this.carService.getCars().subscribe(
+    response => {
+      this.cars = response.data.slice(0, 6);
+      this.dataLoaded = true;
+    },
+    error => {
+      console.error('Could not load cars:', error);
+      this.dataLoaded = true; // stop spinner
+    }
+  );
+}
 
   getCurrentImageClass(car:Car){
     if(car==this.cars[0]){

@@ -6,7 +6,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:5233/api/'
+  apiUrl: 'https://rentacar-backend-x1mg.onrender.com/api/'
 };
 /*
  * For easier debugging in development mode, you can import the following file

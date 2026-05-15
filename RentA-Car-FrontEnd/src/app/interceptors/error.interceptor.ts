@@ -33,7 +33,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           this.toastr.error('Server error. Please try again later.', 'Server Error');
         }
 
-        return throwError(() => error);
+        return throwError(error);
       })
     );
   }
